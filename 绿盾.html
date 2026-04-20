@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="scroll-smooth">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>绿盾智爆 | Green Shield Intelligent Blasting</title>
+    
+    <!-- 引入字体和图标 -->
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;900&family=Manrope:wght@200;300;400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+    
+    <!-- 引入 Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "outline": "#6c7a71",
+                        "primary-fixed-dim": "#4edea3",
+                        "surface-bright": "#f9f9ff",
+                        "error": "#ba1a1a",
+                        "secondary-fixed": "#dbe1ff",
+                        "surface-container-highest": "#dde2f3",
+                        "surface-container": "#e8eeff",
+                        "inverse-primary": "#4edea3",
+                        "tertiary-fixed": "#dde2f3",
+                        "on-error": "#ffffff",
+                        "tertiary": "#585e6c",
+                        "on-secondary-fixed-variant": "#003ea8",
+                        "surface-dim": "#d4daea",
+                        "on-error-container": "#93000a",
+                        "surface-container-low": "#f1f3ff",
+                        "on-primary-container": "#00422b",
+                        "secondary-container": "#316bf3",
+                        "tertiary-container": "#9da3b3",
+                        "on-surface-variant": "#3c4a42",
+                        "on-background": "#161c27",
+                        "error-container": "#ffdad6",
+                        "surface-container-high": "#e3e8f9",
+                        "on-primary": "#ffffff",
+                        "secondary": "#0051d5",
+                        "surface-tint": "#006c49",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary-fixed-variant": "#414754",
+                        "tertiary-fixed-dim": "#c1c6d7",
+                        "primary": "#006c49",
+                        "on-tertiary-fixed": "#161c27",
+                        "primary-container": "#10b981",
+                        "surface-variant": "#dde2f3",
+                        "surface": "#f9f9ff",
+                        "on-surface": "#161c27",
+                        "on-primary-fixed-variant": "#005236",
+                        "primary-fixed": "#6ffbbe",
+                        "inverse-surface": "#2a303d",
+                        "inverse-on-surface": "#ecf0ff",
+                        "on-primary-fixed": "#002113",
+                        "on-secondary-fixed": "#00174b",
+                        "on-tertiary-container": "#333946",
+                        "secondary-fixed-dim": "#b4c5ff",
+                        "on-secondary": "#ffffff",
+                        "outline-variant": "#bbcabf",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary-container": "#fefcff",
+                        "background": "#f9f9ff"
+                    },
+                    fontFamily: {
+                        "headline": ["Space Grotesk", "system-ui", "sans-serif"],
+                        "body": ["Manrope", "PingFang SC", "Microsoft YaHei", "sans-serif"],
+                        "label": ["Space Grotesk", "system-ui", "sans-serif"],
+                        "mono": ["JetBrains Mono", "monospace"]
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.4s ease-out forwards'
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'translateY(10px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' }
+                        }
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        body { font-family: 'Manrope', 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+        .font-headline { font-family: 'Space Grotesk', 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+        .glass { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(20px); }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .tectonic-layer { transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
+        .tectonic-layer:hover { transform: translateY(-4px); }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface selection:bg-primary-container selection:text-on-primary-container">
+
+    <!-- 全局顶部导航栏 -->
+    <nav class="fixed top-0 w-full z-50 bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl shadow-sm transition-all duration-150 ease-linear">
+        <div class="flex justify-between items-center h-20 px-8 max-w-screen-2xl mx-auto">
+            <div class="text-xl font-black text-slate-900 dark:text-white tracking-tighter font-headline cursor-pointer" onclick="switchView('home')">
+                Green Shield 绿盾智爆
+            </div>
+            <div class="hidden md:flex items-center space-x-8 font-headline tracking-tight font-bold">
+                <a id="nav-home" onclick="switchView('home')" class="nav-item cursor-pointer text-emerald-600 border-b-2 border-emerald-600 pb-1">首页</a>
+                <a id="nav-services" onclick="switchView('services')" class="nav-item cursor-pointer text-slate-600 hover:text-emerald-600 transition-colors">服务商城</a>
+                <a id="nav-comparison" onclick="switchView('comparison')" class="nav-item cursor-pointer text-slate-600 hover:text-emerald-600 transition-colors">服务对比</a>
+                <a id="nav-cases" onclick="switchView('cases')" class="nav-item cursor-pointer text-slate-600 hover:text-emerald-600 transition-colors">案例中心</a>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button class="px-5 py-2 text-sm font-bold text-slate-600 hover:bg-slate-100/50 rounded-lg transition-all" onclick="showModal('用户登录', '登录系统正在维护升级中，敬请期待！')">登录</button>
+                <button class="px-6 py-2.5 bg-primary text-on-primary font-bold rounded-xl hover:bg-primary/90 transition-all shadow-lg shadow-primary/20" onclick="showModal('获取报价', '系统正在为您分配专属顾问，稍后将通过弹窗或电话联系您。')">立即获取报价</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 全局侧边悬浮工具栏 -->
+    <aside class="fixed right-4 top-1/2 -translate-y-1/2 rounded-full py-4 border border-slate-200/20 bg-white/80 dark:bg-slate-900/80 glass backdrop-blur-md shadow-xl flex flex-col space-y-6 items-center w-16 z-40">
+        <div class="flex flex-col items-center group cursor-pointer hover:scale-110 transition-transform" onclick="showModal('业务咨询', '请拨打全国统一业务热线：400-888-9999。')">
+            <span class="material-symbols-outlined text-emerald-600" style="font-variation-settings: 'FILL' 1;">support_agent</span>
+            <span class="font-medium text-[10px] text-slate-500 mt-1">咨询</span>
+        </div>
+        <div class="flex flex-col items-center group cursor-pointer hover:scale-110 transition-transform" onclick="showModal('在线客服', '正在为您分配专属人工客服，请稍候...')">
+            <span class="material-symbols-outlined text-slate-400 group-hover:text-emerald-500">chat</span>
+            <span class="font-medium text-[10px] text-slate-400 group-hover:text-emerald-500 mt-1">客服</span>
+        </div>
+        <div class="flex flex-col items-center group cursor-pointer hover:scale-110 transition-transform" onclick="showModal('成本估算', '请先在【服务商城】选择您需要的模块，系统将自动生成估算报告。')">
+            <span class="material-symbols-outlined text-slate-400 group-hover:text-emerald-500">calculate</span>
+            <span class="font-medium text-[10px] text-slate-400 group-hover:text-emerald-500 mt-1">估算</span>
+        </div>
+        <div class="flex flex-col items-center group cursor-pointer hover:scale-110 transition-transform pt-2 border-t border-slate-100" onclick="showModal('意见反馈', '感谢您的关注！反馈收集功能将在下个版本上线。')">
+            <span class="material-symbols-outlined text-slate-400 group-hover:text-emerald-500">rate_review</span>
+            <span class="font-medium text-[10px] text-slate-400 group-hover:text-emerald-500 mt-1">反馈</span>
+        </div>
+    </aside>
+
+    <!-- 主内容区 (所有页面视图) -->
+    <main>
+        
+        <!-- ============================================== -->
+        <!-- 页面 1: 首页 (Home) -->
+        <!-- ============================================== -->
+        <div id="view-home" class="view-section">
+            <section class="relative h-screen flex items-center overflow-hidden pt-20">
+                <div class="absolute inset-0 z-0">
+                    <img alt="大比例尺精密工程现场" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDjO5OlrYWpBXnAWhyRWNGH9MozTK-9hpMw54tRdvGqWQpeLmGK0O3sn13Ux2PDMAGBrDbxDDEw3pSoQjkfFN9mH9gmQKI9PSqrBtvO4JggJ_ZxbzRse5Ikxj7opUdO2klHjbZvol6eRr4qI_Mly7API0Uw8bIAUr5W2re5BX3FwiT18GW4lijEtMLjKBaYQJ6yhP0Co4Y7blShsZfTSP1Y8cPcnnXHX-k7VlanCww9E1FTe74sjEP0kdFXFgYevVqSktTsUfYNBg"/>
+                    <div class="absolute inset-0 bg-gradient-to-r from-on-background/90 via-on-background/40 to-transparent"></div>
+                </div>
+                <div class="relative z-10 max-w-screen-2xl mx-auto px-8 w-full">
+                    <div class="max-w-4xl space-y-8">
+                        <h1 class="font-headline text-5xl md:text-7xl font-black text-white tracking-tighter leading-tight">
+                            绿盾智爆・全周期<br/><span class="text-primary-container">绿色岩土工程</span>解决方案
+                        </h1>
+                        <p class="text-xl md:text-2xl text-slate-300 font-medium">
+                            单项按需选・组合更划算・一条龙立省 25%
+                        </p>
+                        <div class="flex flex-wrap gap-4 pt-4">
+                            <button class="px-8 py-4 bg-primary text-on-primary font-bold rounded-xl text-lg hover:bg-primary/90 transition-all flex items-center gap-2" onclick="showModal('获取报价', '正在为您分配专属工程顾问...')">
+                                立即获取报价 <span class="material-symbols-outlined">arrow_forward</span>
+                            </button>
+                            <button onclick="switchView('services')" class="px-8 py-4 bg-white/10 text-white font-bold rounded-xl text-lg border border-white/20 backdrop-blur-md hover:bg-white/20 transition-all">
+                                查看服务套餐
+                            </button>
+                        </div>
+                    </div>
+                    <div class="absolute bottom-12 left-8 right-8 flex flex-wrap gap-4 items-center justify-between hidden md:flex">
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 p-6 glass rounded-2xl border border-white/30 max-w-5xl">
+                            <div class="space-y-1">
+                                <span class="text-[10px] font-bold text-primary tracking-widest uppercase">Precision 精准控制</span>
+                                <div class="font-headline text-xl font-black text-on-surface">振动≤0.5cm/s</div>
+                            </div>
+                            <div class="space-y-1 border-l border-slate-200 pl-6">
+                                <span class="text-[10px] font-bold text-primary tracking-widest uppercase">Emission 减排标准</span>
+                                <div class="font-headline text-xl font-black text-on-surface">有害气体减排 80%</div>
+                            </div>
+                            <div class="space-y-1 border-l border-slate-200 pl-6">
+                                <span class="text-[10px] font-bold text-primary tracking-widest uppercase">Intelligence 智能感知</span>
+                                <div class="font-headline text-xl font-black text-on-surface">毫米级预警</div>
+                            </div>
+                            <div class="space-y-1 border-l border-slate-200 pl-6">
+                                <span class="text-[10px] font-bold text-primary tracking-widest uppercase">Eco Recovery 生态修复</span>
+                                <div class="font-headline text-xl font-black text-on-surface">6 个月复绿 85%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="py-24 bg-surface-container-low">
+                <div class="max-w-screen-2xl mx-auto px-8">
+                    <div class="mb-16">
+                        <h2 class="font-headline text-4xl font-black text-on-surface tracking-tight mb-4 text-center">核心业务矩阵</h2>
+                        <div class="w-20 h-1.5 bg-primary-container mx-auto"></div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                        <!-- Service Cards -->
+                        <div class="group bg-surface-container-lowest p-8 rounded-xl transition-all duration-300 hover:scale-[1.02] shadow-sm hover:shadow-xl border border-transparent hover:border-primary-container/20 cursor-pointer" onclick="switchView('services')">
+                            <div class="w-16 h-16 bg-primary/10 rounded-xl flex items-center justify-center mb-8 group-hover:bg-primary transition-colors">
+                                <span class="material-symbols-outlined text-4xl text-primary group-hover:text-white">explosion</span>
+                            </div>
+                            <h3 class="font-headline text-2xl font-bold text-on-surface mb-4">绿色爆破</h3>
+                            <p class="text-slate-500 mb-8 leading-relaxed">基于5G数控的高精度控制爆破技术，将环境干扰降至最低，实现结构化精准剥离。</p>
+                            <button class="w-full py-3 bg-slate-50 text-on-surface font-bold rounded-lg group-hover:bg-primary-container group-hover:text-on-primary-container transition-all flex items-center justify-center gap-2">
+                                了解详情 <span class="material-symbols-outlined text-lg">arrow_right_alt</span>
+                            </button>
+                        </div>
+                        <div class="group bg-surface-container-lowest p-8 rounded-xl transition-all duration-300 hover:scale-[1.02] shadow-sm hover:shadow-xl border border-transparent hover:border-primary-container/20 cursor-pointer" onclick="switchView('services')">
+                            <div class="w-16 h-16 bg-primary/10 rounded-xl flex items-center justify-center mb-8 group-hover:bg-primary transition-colors">
+                                <span class="material-symbols-outlined text-4xl text-primary group-hover:text-white">hub</span>
+                            </div>
+                            <h3 class="font-headline text-2xl font-bold text-on-surface mb-4">智能预警</h3>
+                            <p class="text-slate-500 mb-8 leading-relaxed">全时段振动与位移监测系统，通过AI算法预测潜在风险，确保施工过程绝对安全。</p>
+                            <button class="w-full py-3 bg-slate-50 text-on-surface font-bold rounded-lg group-hover:bg-primary-container group-hover:text-on-primary-container transition-all flex items-center justify-center gap-2">
+                                了解详情 <span class="material-symbols-outlined text-lg">arrow_right_alt</span>
+                            </button>
+                        </div>
+                        <div class="group bg-surface-container-lowest p-8 rounded-xl transition-all duration-300 hover:scale-[1.02] shadow-sm hover:shadow-xl border border-transparent hover:border-primary-container/20 cursor-pointer" onclick="switchView('services')">
+                            <div class="w-16 h-16 bg-primary/10 rounded-xl flex items-center justify-center mb-8 group-hover:bg-primary transition-colors">
+                                <span class="material-symbols-outlined text-4xl text-primary group-hover:text-white">eco</span>
+                            </div>
+                            <h3 class="font-headline text-2xl font-bold text-on-surface mb-4">生态修复</h3>
+                            <p class="text-slate-500 mb-8 leading-relaxed">同步岩土复绿技术，让工程建设与自然修复并行，实现矿山与边坡的快速生态重塑。</p>
+                            <button class="w-full py-3 bg-slate-50 text-on-surface font-bold rounded-lg group-hover:bg-primary-container group-hover:text-on-primary-container transition-all flex items-center justify-center gap-2">
+                                了解详情 <span class="material-symbols-outlined text-lg">arrow_right_alt</span>
+                            </button>
+                        </div>
+                        <div class="group bg-surface-container-lowest p-8 rounded-xl transition-all duration-300 hover:scale-[1.02] shadow-sm hover:shadow-xl border border-transparent hover:border-primary-container/20 cursor-pointer" onclick="switchView('services')">
+                            <div class="w-16 h-16 bg-primary/10 rounded-xl flex items-center justify-center mb-8 group-hover:bg-primary transition-colors">
+                                <span class="material-symbols-outlined text-4xl text-primary group-hover:text-white">visibility</span>
+                            </div>
+                            <h3 class="font-headline text-2xl font-bold text-on-surface mb-4">长效监测</h3>
+                            <p class="text-slate-500 mb-8 leading-relaxed">后工程时期的数字化孪生监测，长期跟踪环境影响，提供持续的数据支撑与保障。</p>
+                            <button class="w-full py-3 bg-slate-50 text-on-surface font-bold rounded-lg group-hover:bg-primary-container group-hover:text-on-primary-container transition-all flex items-center justify-center gap-2">
+                                了解详情 <span class="material-symbols-outlined text-lg">arrow_right_alt</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="py-24 bg-surface">
+                <div class="max-w-screen-2xl mx-auto px-8">
+                    <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-stretch">
+                        <div class="md:col-span-4 bg-on-background text-white p-12 rounded-2xl flex flex-col justify-between">
+                            <div>
+                                <span class="font-headline text-primary-container font-black tracking-widest text-sm uppercase mb-4 block">核心创新</span>
+                                <h2 class="font-headline text-4xl font-bold leading-tight mb-6">4 项行业顶尖专利<br/>引领岩土工程变革</h2>
+                                <p class="text-slate-400 leading-relaxed">我们不仅是施工方，更是岩土工程科技的定义者。通过持续的研发投入，攻克行业“邻避效应”难题。</p>
+                            </div>
+                            <div class="pt-12">
+                                <button class="flex items-center gap-4 group" onclick="showModal('白皮书下载', '技术白皮书（PDF）已开始下载，请留意浏览器提示。')">
+                                    <div class="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center group-hover:bg-white group-hover:text-on-background transition-all">
+                                        <span class="material-symbols-outlined">download</span>
+                                    </div>
+                                    <span class="font-bold">下载技术白皮书</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="md:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-8">
+                            <div class="bg-surface-container-high p-8 rounded-2xl border border-outline-variant/10">
+                                <div class="font-headline text-5xl font-black text-primary mb-2">128+</div>
+                                <div class="font-bold text-on-surface mb-4">大型项目成功案例</div>
+                                <p class="text-slate-500 text-sm">跨越交通、水利、矿山三大领域，实现零事故、零违规。</p>
+                            </div>
+                            <div class="bg-surface-container-high p-8 rounded-2xl border border-outline-variant/10">
+                                <div class="font-headline text-5xl font-black text-primary mb-2">25%</div>
+                                <div class="font-bold text-on-surface mb-4">综合成本降低</div>
+                                <p class="text-slate-500 text-sm">通过全生命周期的一体化管控，大幅缩短工期并减少二次修复投入。</p>
+                            </div>
+                            <div class="bg-surface-container-high p-8 rounded-2xl border border-outline-variant/10">
+                                <div class="font-headline text-5xl font-black text-primary mb-2">99.9%</div>
+                                <div class="font-bold text-on-surface mb-4">实时数据覆盖率</div>
+                                <p class="text-slate-500 text-sm">每一颗雷管、每一个测点，皆在云端数字孪生平台的掌控之中。</p>
+                            </div>
+                            <div class="bg-surface-container-high p-8 rounded-2xl border border-outline-variant/10">
+                                <div class="font-headline text-5xl font-black text-primary mb-2">850k+</div>
+                                <div class="font-bold text-on-surface mb-4">累计复绿面积 (m²)</div>
+                                <p class="text-slate-500 text-sm">我们将灰色的工地转化为绿色的公园，践行生态文明承诺。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+
+        <!-- ============================================== -->
+        <!-- 页面 2: 服务商城 (Services) -->
+        <!-- ============================================== -->
+        <div id="view-services" class="view-section hidden pt-24 pb-20">
+            <div class="max-w-screen-2xl mx-auto px-8 flex gap-8">
+                <aside class="w-64 hidden xl:block sticky top-28 self-start">
+                    <div class="bg-surface-container-low rounded-xl p-6">
+                        <h3 class="font-headline font-bold text-lg mb-6 tracking-tight">应用场景过滤</h3>
+                        <div class="flex flex-col space-y-3">
+                            <label class="flex items-center gap-3 cursor-pointer group">
+                                <input class="w-5 h-5 rounded border-outline-variant text-primary focus:ring-primary" type="checkbox" checked/>
+                                <span class="font-medium text-on-surface-variant group-hover:text-primary transition-colors">城市更新</span>
+                            </label>
+                            <label class="flex items-center gap-3 cursor-pointer group">
+                                <input class="w-5 h-5 rounded border-outline-variant text-primary focus:ring-primary" type="checkbox" checked/>
+                                <span class="font-medium text-on-surface-variant group-hover:text-primary transition-colors">交通基建</span>
+                            </label>
+                            <label class="flex items-center gap-3 cursor-pointer group">
+                                <input class="w-5 h-5 rounded border-outline-variant text-primary focus:ring-primary" type="checkbox"/>
+                                <span class="font-medium text-on-surface-variant group-hover:text-primary transition-colors">矿山修复</span>
+                            </label>
+                        </div>
+                        <div class="mt-10 pt-8 border-t border-outline-variant/15">
+                            <div class="bg-secondary-container rounded-xl p-6 text-on-secondary-container relative overflow-hidden group">
+                                <div class="relative z-10">
+                                    <p class="text-xs font-bold font-headline uppercase tracking-widest opacity-80 mb-2">服务中心</p>
+                                    <h4 class="text-xl font-black mb-4">服务商城</h4>
+                                    <p class="text-sm leading-relaxed mb-6">为可持续工程爆破提供专家级智能支持。</p>
+                                    <button class="w-full bg-white text-secondary font-bold py-3 rounded-lg tectonic-layer hover:bg-slate-50 transition-colors" onclick="showModal('申请技术规范', '请登录后下载相关的施工与技术规范文档。')">申请技术规范</button>
+                                </div>
+                                <div class="absolute -bottom-8 -right-8 opacity-10 scale-150 rotate-12 pointer-events-none">
+                                    <span class="material-symbols-outlined text-9xl">precision_manufacturing</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+
+                <div class="flex-1 space-y-16">
+                    <div class="sticky top-20 z-30 py-4 bg-surface/90 backdrop-blur-md">
+                        <div class="flex space-x-2 p-1 bg-surface-container rounded-xl w-fit">
+                            <a class="px-6 py-2.5 rounded-lg text-sm font-bold bg-white shadow-sm text-primary transition-all" href="#single-services">单项服务</a>
+                            <a class="px-6 py-2.5 rounded-lg text-sm font-bold text-on-surface-variant hover:bg-surface-container-high transition-all" href="#combo-packages">组合套餐</a>
+                            <a class="px-6 py-2.5 rounded-lg text-sm font-bold text-on-surface-variant hover:bg-surface-container-high transition-all" href="#full-package">一条龙全包</a>
+                        </div>
+                    </div>
+
+                    <section class="scroll-mt-32" id="single-services">
+                        <div class="flex justify-between items-end mb-8">
+                            <div>
+                                <h2 class="text-4xl font-black font-headline tracking-tighter">单项服务</h2>
+                                <p class="text-on-surface-variant mt-2">针对特定爆破阶段需求的精准模块化服务。</p>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="bg-surface-container-lowest p-8 rounded-xl tectonic-layer flex flex-col h-full border border-transparent hover:border-primary/20 shadow-sm">
+                                <div class="flex justify-between items-start mb-6">
+                                    <div class="p-3 bg-primary/10 rounded-lg"><span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">explosion</span></div>
+                                    <div class="text-right">
+                                        <p class="text-[10px] font-bold font-headline uppercase tracking-widest text-on-surface-variant/60">定价标准</p>
+                                        <p class="text-2xl font-black font-mono text-primary tracking-tighter">¥85.00 <span class="text-sm font-body font-normal text-on-surface-variant">/ m³</span></p>
+                                    </div>
+                                </div>
+                                <h3 class="text-2xl font-black font-headline mb-3">绿色精准爆破</h3>
+                                <p class="text-on-surface-variant text-sm mb-6 flex-1">毫秒级延时控制，振动精度控制在±5cm以内。适用于敏感城市开挖和高密度岩层。</p>
+                                <button class="w-full bg-surface-container-high text-on-surface font-bold py-3 rounded-lg hover:bg-primary-container hover:text-on-primary-container transition-all" onclick="showModal('已加入意向单', '【绿色精准爆破】已成功加入您的咨询清单，工程顾问稍后将与您联系细节。')">加入咨询单</button>
+                            </div>
+                            <div class="bg-surface-container-lowest p-8 rounded-xl tectonic-layer flex flex-col h-full border border-transparent hover:border-primary/20 shadow-sm">
+                                <div class="flex justify-between items-start mb-6">
+                                    <div class="p-3 bg-secondary-container/10 rounded-lg"><span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">sensors</span></div>
+                                    <div class="text-right">
+                                        <p class="text-[10px] font-bold font-headline uppercase tracking-widest text-on-surface-variant/60">订阅服务</p>
+                                        <p class="text-2xl font-black font-mono text-secondary tracking-tighter">¥4,200 <span class="text-sm font-body font-normal text-on-surface-variant">/ 周</span></p>
+                                    </div>
+                                </div>
+                                <h3 class="text-2xl font-black font-headline mb-3">5G实时监测</h3>
+                                <p class="text-on-surface-variant text-sm mb-6 flex-1">持续的结构监测和周边安全防范。集成了自动紧急停工协议。</p>
+                                <button class="w-full bg-surface-container-high text-on-surface font-bold py-3 rounded-lg hover:bg-primary-container hover:text-on-primary-container transition-all" onclick="showModal('已加入意向单', '【5G实时监测】已成功加入您的咨询清单，工程顾问稍后将与您联系细节。')">加入咨询单</button>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="scroll-mt-32" id="combo-packages">
+                        <div class="mb-8">
+                            <h2 class="text-4xl font-black font-headline tracking-tighter">组合套餐</h2>
+                            <p class="text-on-surface-variant mt-2">优化配对，确保业务流程的无缝衔接。</p>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <div class="bg-surface-container-low p-6 rounded-xl border border-outline-variant/10 group cursor-pointer hover:border-primary/30 transition-all">
+                                <div class="flex gap-2 mb-4">
+                                    <span class="material-symbols-outlined text-primary text-xl">explosion</span>
+                                    <span class="text-on-surface-variant/30">+</span>
+                                    <span class="material-symbols-outlined text-secondary text-xl">sensors</span>
+                                </div>
+                                <h4 class="font-bold text-lg mb-1">安全爆破双选</h4>
+                                <p class="text-xs text-on-surface-variant mb-6">爆破 + 实时预警系统</p>
+                                <div class="mb-6">
+                                    <span class="text-2xl font-black font-mono text-on-surface">¥11,800</span>
+                                    <div class="flex items-center gap-2 mt-1">
+                                        <span class="text-xs line-through text-on-surface-variant/60">原价 ¥14,500</span>
+                                        <span class="bg-error/10 text-error text-[10px] font-black px-2 py-0.5 rounded">立省 ¥2,700</span>
+                                    </div>
+                                </div>
+                                <button class="w-full bg-white border border-outline-variant/30 font-bold py-2.5 rounded-lg group-hover:bg-primary group-hover:text-white transition-all" onclick="showModal('套餐已锁定', '已为您预留【安全爆破双选】套餐。客服专员将在2小时内为您提供详细合同清单。')">选择套餐</button>
+                            </div>
+                            <div class="bg-surface-container-low p-6 rounded-xl border border-outline-variant/10 group cursor-pointer hover:border-primary/30 transition-all">
+                                <div class="flex gap-2 mb-4">
+                                    <span class="material-symbols-outlined text-primary text-xl">explosion</span>
+                                    <span class="text-on-surface-variant/30">+</span>
+                                    <span class="material-symbols-outlined text-primary text-xl">construction</span>
+                                </div>
+                                <h4 class="font-bold text-lg mb-1">生态基础</h4>
+                                <p class="text-xs text-on-surface-variant mb-6">爆破 + 修复服务</p>
+                                <div class="mb-6">
+                                    <span class="text-2xl font-black font-mono text-on-surface">¥9,900</span>
+                                    <div class="flex items-center gap-2 mt-1">
+                                        <span class="text-xs line-through text-on-surface-variant/60">原价 ¥12,200</span>
+                                        <span class="bg-error/10 text-error text-[10px] font-black px-2 py-0.5 rounded">立省 ¥2,300</span>
+                                    </div>
+                                </div>
+                                <button class="w-full bg-white border border-outline-variant/30 font-bold py-2.5 rounded-lg group-hover:bg-primary group-hover:text-white transition-all" onclick="showModal('套餐已锁定', '已为您预留【生态基础】套餐。客服专员将在2小时内为您提供详细合同清单。')">选择套餐</button>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="scroll-mt-32" id="full-package">
+                        <div class="relative rounded-2xl overflow-hidden p-1 bg-gradient-to-br from-amber-400 via-emerald-500 to-emerald-800">
+                            <div class="bg-on-background rounded-[calc(1rem-2px)] p-12 text-white relative overflow-hidden">
+                                <div class="absolute top-8 right-8 bg-amber-400 text-on-background px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">star</span>
+                                    官方推荐
+                                </div>
+                                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 relative z-10">
+                                    <div>
+                                        <h2 class="text-5xl font-black font-headline tracking-tighter mb-6 leading-tight">四位一体<br/><span class="text-emerald-400">一条龙全包服务</span></h2>
+                                        <p class="text-slate-300 text-lg mb-10 leading-relaxed">终极工程合作伙伴。覆盖策略规划、方案执行、实时监测及现场恢复的全周期服务。</p>
+                                        <div class="space-y-6">
+                                            <h4 class="text-sm font-bold font-headline uppercase tracking-widest text-emerald-400 border-b border-emerald-400/20 pb-2">专属尊享权益</h4>
+                                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                                <div class="flex items-center gap-3"><span class="material-symbols-outlined text-emerald-400">cloud_done</span><span class="text-sm text-slate-100">全功能云平台权限</span></div>
+                                                <div class="flex items-center gap-3"><span class="material-symbols-outlined text-emerald-400">verified_user</span><span class="text-sm text-slate-100">官方安全评估报告</span></div>
+                                                <div class="flex items-center gap-3"><span class="material-symbols-outlined text-emerald-400">eco</span><span class="text-sm text-slate-100">年度碳排放报告</span></div>
+                                                <div class="flex items-center gap-3"><span class="material-symbols-outlined text-emerald-400">support</span><span class="text-sm text-slate-100">24/7 VIP 咨询热线</span></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="bg-white/5 backdrop-blur-xl rounded-2xl p-10 border border-white/10 flex flex-col justify-center text-center">
+                                        <p class="text-emerald-400 font-bold mb-2">大型基建推荐</p>
+                                        <h3 class="text-6xl font-black font-mono tracking-tighter mb-4">全面护航</h3>
+                                        <div class="bg-error/20 text-error-container border border-error/20 py-3 px-6 rounded-xl inline-block mx-auto mb-10">
+                                            <p class="text-lg font-black tracking-tight">综合立省达 25%</p>
+                                        </div>
+                                        <button class="w-full bg-emerald-500 hover:bg-emerald-400 text-on-background font-black py-5 rounded-xl text-xl shadow-lg shadow-emerald-500/20 transition-all" onclick="showModal('VIP 预订成功', '我们已收到您的全包意向，高级工程副总将在一小时内与您建立专项对接。')">预订全包套餐</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- ============================================== -->
+        <!-- 页面 3: 服务对比 (Comparison) -->
+        <!-- ============================================== -->
+        <div id="view-comparison" class="view-section hidden pt-32 pb-20">
+            <header class="px-8 relative overflow-hidden mb-20 max-w-screen-2xl mx-auto">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                    <div>
+                        <span class="text-primary font-bold tracking-widest text-sm uppercase mb-4 block">精准对比</span>
+                        <h1 class="text-6xl md:text-7xl font-black font-headline tracking-tighter text-on-background leading-none mb-6">
+                            技术卓越 <br/><span class="text-primary-container">定义标准</span>
+                        </h1>
+                        <p class="text-xl text-on-surface-variant max-w-xl font-light leading-relaxed">
+                            对比我们为精密和生态管理设计的智能爆破解决方案，选择最符合您项目技术需求的方案级别。
+                        </p>
+                    </div>
+                    <div class="relative h-64 lg:h-96 rounded-xl overflow-hidden shadow-2xl">
+                        <img alt="精密开挖" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAvWXLQ-Xv12Kz1oDKnLwSie9WI1kcwcpi0squzDTDVOVmX5JaaZimrb655XVqjTAtmp0xUDOh4KTGDLXkWszDYYuYNsujSE65Xb9N5TAReRBuoWYQjXXA7UZiRmnDYjTxjsN9SNgH6u1RZ-4Hq8kWa0Tbq2vBHsZ2p83lDSVziPh6FYKhtcuIyz5qRG1DfcsHOSWy91DcaTdER8fpxtNcIYJIWnFySa_pYSKU-HK6Kn8xgazQBWTVh4Gf1FJ9_n-ZD6OJugZ3HAA"/>
+                        <div class="absolute inset-0 bg-gradient-to-t from-on-background/60 to-transparent"></div>
+                        <div class="absolute bottom-6 left-6 text-white">
+                            <div class="font-mono text-xs opacity-80">坐标: 34.0522° N | 118.2437° W</div>
+                            <div class="font-headline font-bold">作业项目: 精准开挖 X-1</div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <section class="px-8 max-w-screen-2xl mx-auto">
+                <div class="overflow-x-auto shadow-sm rounded-xl border border-outline-variant/20">
+                    <table class="w-full border-separate border-spacing-0">
+                        <thead>
+                            <tr>
+                                <th class="p-8 text-left bg-surface-container-lowest rounded-tl-xl border-b border-outline-variant/10">
+                                    <span class="text-sm font-mono text-primary">01 / 核心能力</span>
+                                </th>
+                                <th class="p-8 bg-surface-container-lowest border-b border-outline-variant/10 min-w-[280px]">
+                                    <div class="text-left">
+                                        <div class="text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-1">Standard</div>
+                                        <div class="text-2xl font-black font-headline text-on-surface">单项服务</div>
+                                    </div>
+                                </th>
+                                <th class="p-8 bg-surface-container-lowest border-b-2 border-primary-container min-w-[280px] relative">
+                                    <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-primary-container text-on-primary-container text-[10px] font-bold px-4 py-1 rounded-full uppercase tracking-tighter shadow-lg">最受欢迎</div>
+                                    <div class="text-left">
+                                        <div class="text-xs font-bold text-primary uppercase tracking-widest mb-1">Professional</div>
+                                        <div class="text-2xl font-black font-headline text-on-surface">组合套餐</div>
+                                    </div>
+                                </th>
+                                <th class="p-8 bg-surface-container-lowest rounded-tr-xl border-b border-outline-variant/10 min-w-[280px]">
+                                    <div class="text-left">
+                                        <div class="text-xs font-bold text-secondary uppercase tracking-widest mb-1">Enterprise</div>
+                                        <div class="text-2xl font-black font-headline text-on-surface">一条龙全包</div>
+                                    </div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white">
+                            <tr>
+                                <td class="p-8 border-b border-outline-variant/10 font-bold font-headline text-on-surface">服务内容</td>
+                                <td class="p-8 border-b border-outline-variant/10 text-on-surface-variant">单一爆破或测量项目执行</td>
+                                <td class="p-8 border-b border-outline-variant/10 bg-surface-container-low font-medium text-on-surface">集成测量 + 爆破 + 5G数据监测</td>
+                                <td class="p-8 border-b border-outline-variant/10 text-on-surface-variant">从设计到修复的全生命周期管理</td>
+                            </tr>
+                            <tr>
+                                <td class="p-8 border-b border-outline-variant/10 font-bold font-headline text-on-surface">交付周期</td>
+                                <td class="p-8 border-b border-outline-variant/10 text-sm">7-14 个工作日</td>
+                                <td class="p-8 border-b border-outline-variant/10 bg-surface-container-low text-sm font-bold">5-10 个工作日</td>
+                                <td class="p-8 border-b border-outline-variant/10 text-sm">24/7 按需优先响应</td>
+                            </tr>
+                            <tr>
+                                <td class="p-8 border-b border-outline-variant/10 font-bold font-headline text-on-surface">质保服务</td>
+                                <td class="p-8 border-b border-outline-variant/10">
+                                    <span class="material-symbols-outlined text-error align-middle">close</span>
+                                    <span class="text-xs text-error font-bold align-middle ml-1">有限质保</span>
+                                </td>
+                                <td class="p-8 border-b border-outline-variant/10 bg-surface-container-low">
+                                    <span class="material-symbols-outlined text-primary-container align-middle">check_circle</span>
+                                    <span class="text-xs text-primary-container font-bold align-middle ml-1">2年全保</span>
+                                </td>
+                                <td class="p-8 border-b border-outline-variant/10">
+                                    <span class="material-symbols-outlined text-primary-container align-middle">verified</span>
+                                    <span class="text-xs text-primary-container font-bold align-middle ml-1">终身支持</span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+
+
+        <!-- ============================================== -->
+        <!-- 页面 4: 案例中心 (Cases) -->
+        <!-- ============================================== -->
+        <div id="view-cases" class="view-section hidden pt-32 pb-24 px-8 max-w-screen-2xl mx-auto">
+            <header class="mb-20">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end">
+                    <div class="lg:col-span-7">
+                        <p class="font-mono text-primary font-bold tracking-widest uppercase mb-4 text-sm">精密工程</p>
+                        <h1 class="text-6xl font-headline font-black tracking-tighter text-on-background leading-none mb-6">
+                            成功案例<br/>
+                            <span class="text-outline/40 italic">突破行业边界</span>
+                        </h1>
+                        <p class="text-xl text-tertiary max-w-2xl font-light leading-relaxed">
+                            探索我们的高精度爆破案例，见证5G技术与生态保护的完美融合。
+                        </p>
+                    </div>
+                </div>
+            </header>
+
+            <section class="mb-24">
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+                    <div class="md:col-span-8 relative rounded-xl overflow-hidden min-h-[500px] group bg-surface-container-low">
+                        <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDGeSA-9LNoNBLxaKowwQGeP5SvRphBiGT1EeCekuVh6ahyOk1ah9zcHX_5C7gewA38MTISAi3YIHHl4Ut_9JXx87zLdl0XFva0j637qz9Tn2z0J3aIY1tWfIWLReJrt55P82ZrimO4WbOAj93zYG5YKn3feZhmSlpcICo9LPyPkQ_5Eje1_Y_BJ7CRUvNLduqamzaMsG-mp3qs9aS0C4_KdyE2PUkONuh4DyT9HJkQelA_KiLRmH89ajAmBPFwq9RL4kP5TLAo0A"/>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex flex-col justify-end p-10">
+                            <div class="flex items-center space-x-3 mb-4">
+                                <span class="px-3 py-1 bg-primary-container text-on-primary-container text-xs font-bold rounded">全流程套餐案例</span>
+                                <span class="text-white/70 font-mono text-xs tracking-widest">项目编号: GS-2024-X01</span>
+                            </div>
+                            <h2 class="text-4xl text-white font-headline font-bold tracking-tight mb-4">北岭矿区生态采矿项目</h2>
+                            <div class="flex space-x-12">
+                                <div><p class="text-white/50 text-xs font-bold uppercase mb-1">振动降低</p><p class="text-primary-fixed-dim font-mono text-2xl font-bold">94.2%</p></div>
+                                <div><p class="text-white/50 text-xs font-bold uppercase mb-1">精度</p><p class="text-primary-fixed-dim font-mono text-2xl font-bold">±0.15m</p></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="md:col-span-4 flex flex-col gap-6">
+                        <div class="bg-surface-container-lowest p-8 rounded-xl border border-outline-variant/10 border-b-4 border-primary-container flex-1">
+                            <h3 class="text-lg font-headline font-bold mb-4 flex items-center">
+                                <span class="material-symbols-outlined mr-2 text-primary">analytics</span> 解决方案
+                            </h3>
+                            <p class="text-tertiary text-sm leading-relaxed mb-6">采用同步5G网格化毫秒级起爆控制技术，在最大限度减少冲击波的同时，提高破碎效率，保护周围敏感的生态系统。</p>
+                            <ul class="space-y-3">
+                                <li class="flex items-start space-x-2 text-sm font-medium"><span class="material-symbols-outlined text-primary text-sm mt-0.5">check_circle</span><span>数字地形建模 (DTM) 集成</span></li>
+                                <li class="flex items-start space-x-2 text-sm font-medium"><span class="material-symbols-outlined text-primary text-sm mt-0.5">check_circle</span><span>实时地震监测网络</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="space-y-12">
+                <h2 class="text-2xl font-headline font-black tracking-tight flex items-center border-b border-outline-variant/20 pb-6">
+                    <span class="w-2 h-8 bg-primary mr-4"></span> 其他精选案例
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="group">
+                        <div class="aspect-[4/3] rounded-xl overflow-hidden mb-6 bg-surface-container-high relative">
+                            <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCqfrWYPZcpisQADGH0xgS6dqIyGOcMV1xD81myTXNAr02udY6TVZMMvjsHSj0OYzfY89GMKbVru9VW9t1jBvKdw7dE8v25W0eChY9xtSTTGMvrJIsP9pu_4LnigucLiJVrnDShwDPw54s_VAhUSW17TrXpnZC88vW0tWfKrengionpusjulQ6gIJpLadEK54Zcq8TiFrEFc79a_fp0vOeMYzaHC3R373vJG9NWFqDmN87utPYzjZ5IiCSjM5f0VC-KGKMOvID72A"/>
+                        </div>
+                        <div class="px-2">
+                            <h3 class="text-xl font-headline font-bold leading-tight group-hover:text-primary transition-colors mb-3">城市公路基础精密施工</h3>
+                            <p class="text-sm text-tertiary leading-relaxed mb-6">在距居住区仅50米范围内，采用先进的减震帘技术进行受控微爆破。</p>
+                        </div>
+                    </div>
+                    <div class="group">
+                        <div class="aspect-[4/3] rounded-xl overflow-hidden mb-6 bg-surface-container-high relative">
+                            <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCj-lftEcGW3LXpP65T70vfVTLfA1N-pAZEt9nqfscbqK1sa7tOvB7tIuto0eBEH0O_sJqbBTn0j8B_wSERfLr3WFIC5sGwkkrlYNPrvuhEnEIQaIfALTfC7Cj21SiO-Q_nCKsPguiKbtl2Mn83YOfE1j-5QCfx2Ajpo3tqiraaHaEamt0LNu5cZnjGa-qyH4GdGvXt9fGmgkQr1OsUi6T9Ju4sdmPMVLBTHOhgOovWixdxBx0X3AzBSh_d4MWgyPJBUs7lhyeFjw"/>
+                        </div>
+                        <div class="px-2">
+                            <h3 class="text-xl font-headline font-bold leading-tight group-hover:text-primary transition-colors mb-3">数字地质制图与爆破</h3>
+                            <p class="text-sm text-tertiary leading-relaxed mb-6">项目前声波测绘，识别地下断层线，以优化装药位置。</p>
+                        </div>
+                    </div>
+                    <div class="group">
+                        <div class="aspect-[4/3] rounded-xl overflow-hidden mb-6 bg-surface-container-high relative">
+                            <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAGMWYXxHhqmWYMuaPrce1NvTIDDgIPRbRgBQg-xwGnHq2D3TKbTKPig4WiA0WFpGl0tN6Kv4-GqkTrzfhxNawA3QN4X18hcNgbDNy6ACPAerN9qCdKTZxBuiOu2t0ef-ZvAW6QcXkVNregCQLEoi5sCEkPgfg1sFdx5m_boxpaBlK6X53EAkKCFNrXrbYtIMw-RrIQ1tMl-T-I5JbjuvmkA6xmaqf8uKih1T4emUby2kE3f1XljJNXthaC4Pa2_gR2KvLo9S9IeA"/>
+                        </div>
+                        <div class="px-2">
+                            <h3 class="text-xl font-headline font-bold leading-tight group-hover:text-primary transition-colors mb-3">水下运河生态加深</h3>
+                            <p class="text-sm text-tertiary leading-relaxed mb-6">生态友好型水下起爆，保留了 98% 的当地水生迁徙路径。</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+    </main>
+
+    <!-- 全局统一页脚 -->
+    <footer class="bg-slate-50 dark:bg-slate-950 full-width py-16 px-8 mt-10">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-12 max-w-screen-2xl mx-auto">
+            <div class="space-y-6">
+                <div class="text-lg font-bold text-slate-800 dark:text-slate-200">Green Shield 绿盾智爆</div>
+                <p class="text-sm text-slate-500 leading-relaxed">
+                    专注于为全球基建提供全周期绿色岩土工程解决方案，以科技守护自然，以数据定义精密。
+                </p>
+            </div>
+            <div class="space-y-6">
+                <div class="font-bold text-slate-800 dark:text-slate-200 uppercase tracking-widest text-xs">解决方案</div>
+                <ul class="space-y-4 text-sm text-slate-500">
+                    <li><a class="cursor-pointer hover:text-emerald-600 hover:translate-x-1 transition-all inline-block" onclick="switchView('services')">服务商城</a></li>
+                    <li><a class="cursor-pointer hover:text-emerald-600 hover:translate-x-1 transition-all inline-block" onclick="switchView('cases')">案例中心</a></li>
+                    <li><a class="cursor-pointer hover:text-emerald-600 hover:translate-x-1 transition-all inline-block" onclick="switchView('comparison')">方案对比</a></li>
+                </ul>
+            </div>
+            <div class="space-y-6">
+                <div class="font-bold text-slate-800 dark:text-slate-200 uppercase tracking-widest text-xs">支持与服务</div>
+                <ul class="space-y-4 text-sm text-slate-500">
+                    <li><a class="hover:text-emerald-600 hover:translate-x-1 transition-all inline-block" href="#">技术支持</a></li>
+                    <li><a class="hover:text-emerald-600 hover:translate-x-1 transition-all inline-block" href="#">隐私政策</a></li>
+                </ul>
+            </div>
+            <div class="space-y-6">
+                <div class="font-bold text-slate-800 dark:text-slate-200 uppercase tracking-widest text-xs">联系我们</div>
+                <div class="text-sm text-slate-500 leading-relaxed">
+                    总部：深圳市南山区高新科技园 T3 座<br/>
+                    电话：400-888-9999<br/>
+                    邮箱：service@greenshield.com
+                </div>
+            </div>
+        </div>
+        <div class="max-w-screen-2xl mx-auto mt-16 pt-8 border-t border-slate-200 dark:border-slate-800">
+            <div class="text-sm text-slate-500 text-center">
+                © 2024 绿盾智爆（Green Shield Intelligent Blasting）. 工程精密与生态守护。
+            </div>
+        </div>
+    </footer>
+
+    <!-- 全局消息弹窗 (Modal) -->
+    <div id="custom-modal" class="fixed inset-0 z-[100] hidden items-center justify-center">
+        <!-- 遮罩层 -->
+        <div class="absolute inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity cursor-pointer" onclick="closeModal()"></div>
+        <!-- 弹窗内容 -->
+        <div class="relative bg-white dark:bg-slate-800 rounded-2xl shadow-2xl w-full max-w-sm p-6 transform scale-95 opacity-0 transition-all duration-300" id="modal-content">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold font-headline text-slate-900 dark:text-white" id="modal-title">提示</h3>
+                <button onclick="closeModal()" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            <div class="flex items-start gap-4 mb-6">
+                <span class="material-symbols-outlined text-primary text-3xl">info</span>
+                <p class="text-slate-600 dark:text-slate-300 leading-relaxed text-sm mt-1" id="modal-message">消息内容</p>
+            </div>
+            <div class="flex justify-end">
+                <button onclick="closeModal()" class="px-6 py-2.5 bg-primary text-on-primary font-bold rounded-xl hover:bg-primary/90 transition-all shadow-md">知道了</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 页面切换及弹窗核心逻辑 (SPA Router & Modal Script) -->
+    <script>
+        // --- 视图切换逻辑 ---
+        function switchView(viewId) {
+            // 1. 隐藏所有视图，移除动画类
+            document.querySelectorAll('.view-section').forEach(el => {
+                el.classList.add('hidden');
+                el.classList.remove('animate-fade-in');
+            });
+
+            // 2. 显示目标视图，并添加淡入动画
+            const targetView = document.getElementById('view-' + viewId);
+            if (targetView) {
+                targetView.classList.remove('hidden');
+                targetView.classList.add('animate-fade-in');
+            }
+
+            // 3. 更新顶部导航栏的活动状态样式
+            document.querySelectorAll('nav .nav-item').forEach(el => {
+                // 恢复默认的文字颜色，移除下划线
+                el.classList.remove('text-emerald-600', 'border-b-2', 'border-emerald-600');
+                el.classList.add('text-slate-600');
+            });
+            const activeNav = document.getElementById('nav-' + viewId);
+            if (activeNav) {
+                // 移除默认文字颜色，添加高亮文字和下划线
+                activeNav.classList.remove('text-slate-600');
+                activeNav.classList.add('text-emerald-600', 'border-b-2', 'border-emerald-600');
+            }
+
+            // 4. 每次切换页面时平滑滚动到顶部
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // --- 自定义弹窗逻辑 ---
+        function showModal(title, message) {
+            const modal = document.getElementById('custom-modal');
+            const modalContent = document.getElementById('modal-content');
+            const titleEl = document.getElementById('modal-title');
+            const messageEl = document.getElementById('modal-message');
+
+            titleEl.textContent = title;
+            messageEl.textContent = message;
+
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            
+            // 延迟一小段时间以触发 CSS 过渡动画
+            setTimeout(() => {
+                modalContent.classList.remove('scale-95', 'opacity-0');
+                modalContent.classList.add('scale-100', 'opacity-100');
+            }, 10);
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('custom-modal');
+            const modalContent = document.getElementById('modal-content');
+
+            // 触发退出动画
+            modalContent.classList.remove('scale-100', 'opacity-100');
+            modalContent.classList.add('scale-95', 'opacity-0');
+
+            // 动画完成后隐藏元素
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }, 300); // 这里的 300ms 必须与 CSS duration-300 一致
+        }
+
+        // 初始化：页面加载时默认显示首页
+        document.addEventListener('DOMContentLoaded', () => {
+            switchView('home');
+        });
+    </script>
+</body>
+</html>
